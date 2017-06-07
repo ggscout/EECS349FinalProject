@@ -74,6 +74,46 @@ def writeFile(X, y, train):
 
             a.writerows(data)
 
+def maximum(X, col):
+    rownum = X.shape[0]
+    maxi = -1000
+    for i in range(rownum):
+        if X[i][col] >= maxi:
+            maxi = X[i][col]
+
+    return maxi
+
+def minimum(X, col):
+    rownum = X.shape[0]
+    mini = 1000000
+    for i in range(rownum):
+        if X[i][col] <= mini:
+            mini = X[i][col]
+
+    return mini
+
+# normalize certain attributes after removing NA
+def normalize(X):
+    rownum = np.shape(X)[0]
+    max0 = maximum(X, 0)
+    min0 = minimum(X, 0)
+    print max0, min0
+    max17 = maximum(X, 17)
+    min17 = minimum(X, 17)
+    max18 = maximum(X, 18)
+    min18 = minimum(X, 18)
+    max22 = maximum(X, 22)
+    min22 = minimum(X, 22)
+    min2 = 0.0
+    max2 = 6.0
+    for i in range(rownum):
+        X[i][0] = (X[i][0] - min0) / (max0 - min0)
+
+        X[i][2] = (X[i][2] - min2) / (max2 - min2)
+        X[i][17] = (X[i][17] - min17) / (max17 - min17)
+        X[i][18] = (X[i][18] - min18) / (max18 - min18)
+        X[i][22] = (X[i][22] - min22) / (max22 - min22)
+
 def replace_NA(X, col):
     rownum = np.shape(X)[0]
     a = []
@@ -138,7 +178,7 @@ X, y = load_data("pisa2009train.csv")
 
 X = preprocess_data(X)
 Y = classify(y)
-
+normalize(X)
 writeFile(X, Y, True)
 
 #-----------------------------------------
@@ -146,4 +186,5 @@ writeFile(X, Y, True)
 X_test, y_test = load_data("pisa2009test.csv")
 X_test = preprocess_data(X_test)
 Y_test = classify(y_test)
+normalize(X_test)
 writeFile(X_test, Y_test, False)

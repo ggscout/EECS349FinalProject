@@ -70,8 +70,16 @@
            work more important than resources and environment? Our task is an important one because it provides us with an insight of whether and to what extent
            some stereotypical attributes/background(like parents' academic degree) can truly reflects/affects students performance so that we can better understand
            students' academic performance and help them in the future.</p>
-        <p>In total, We tried using the following classifiers for our dataset: Decision Tree (J48), K-nearest Neighbors (IBK),
-          Logistic Regression, Linear Regression, Multilayer Perceptron and Naive Bayes.</p>
+        <p>In total, We tried using the following classifiers for our dataset: Naive Bayes, Logistic Regression, Multilayer Perceptron, ClassificationviaRegression,
+        Multiclass Classfier, Random Forest, K-nearest Neighbor (IBk) and Decision Trees (J48) in Weka. It turns out that Logistic Regression and Multiclass Classfier
+        gives a generally better performance. ClassificationviaRegression is also a good candidate algorithm for this problem. However, there is no such perfect algorithm that
+        solves the score prediction problem perfectly. We believe there are factors other than the features we selected that affect students' score in PISA test. Result pictures for the performance of each chosen machine learning algorithm
+        are shown below.</p>
+
+        <h5> Result 1 with Initial Data Processing Approach</h5>
+        <img src="result1.png" alt="result picture 1" width = "700" height = "400"/>
+        <h5> Result 2 with New Data Processing Approach</h5>
+        <img src="result2.png" alt="result picture 2" width = "700" height = "400" />
         <p>There are 23 features in total covering basic information, family background, education background and resources, and classroom experience.</p>
 </div><!-- End container-->
 <hr />
@@ -130,7 +138,7 @@
       	We noticed that an error of ±11% could lead to inaccurate results. Therefore, we decided to transform the initial problem into a classification problem: instead of predicting the exact score of a student, we output a possible range of scores that a student is most likely to get. Specifically, we give all scores ≥ 580 class A, all scores in the range [450, 580) class B, and all scores < 450 class C. Then given a student’s information, we hope to correctly identity their score’s range. Since there are only three classes, we hope to achieve a better result.
       </p>
       <p>
-        One thing worth mentioning here is that there are a lot of missing values in our data. In our first attempt, we filled these values with the mean value of all data.
+        One thing worth mentioning here is that there are a lot of missing values in our data. In our first attempt, we filled these values with the mean attribute value of all data. This time we use 3663 training data and 1570 testing data (total 5233).
       </p>
 
       	<h4 class="text-left">Weka Results</h4>
@@ -161,7 +169,7 @@
             <td>1.5924%</td>
 		      </tr>
 		      <tr>
-		        <td>Logistic Regression</td>
+		        <td><b>Logistic Regression</b></td>
 		        <td>56.8933%</td>
 		        <td>55.6051%</td>
             <td>8.7361%</td>
@@ -175,14 +183,14 @@
             <td>1.7198%</td>
 		      </tr>
           <tr>
-            <td>Classification Via Regression</td>
+            <td><b>Classification Via Regression</b></td>
             <td>57.3301%</td>
             <td>54.9682%</td>
             <td>9.1729%</td>
             <td>7.3886%</td>
           </tr>
           <tr>
-            <td>MultiClass Classifier</td>
+            <td><b>MultiClass Classifier</b></td>
             <td>57.4939%</td>
             <td>56.242%</td>
             <td>9.3367%</td>
@@ -213,7 +221,7 @@
 		</table>
 
       	<h4 class="text-left">Further Efforts</h4>
-        <p>As shown above, our model yields an about 15% improvement compared with ZeroR. Though there is an improvement, we decided to seek further improvement. Here’s what we did:</p>
+        <p>As shown above, our model yields an about 10% improvement compared with ZeroR. Logistic Regression, ClassficationviaRegression and Multiclass Classifier perform well against other candidate algorithms. But there is not such best algorithm that clearly solves the problem with perfect results. Though there is an improvement, we decided to seek further improvement. Here’s what we did:</p>
         <ol>
           <li>
             <p>Data Normalization: For each feature, we normalized all data corresponding to that feature to range [0, 1]. We did this because we thought some features with large values (like school size) would dwarfed other features. </p>
@@ -222,7 +230,7 @@
             <p>Feature Selection: We suspected some of our features may be noisy features. We therefore tried deleting some of our features and re-run the model. For example, we deleted Mother High School, Father High School, and School Size. </p>
           </li>
           <li>
-            <p>Deal with Missing Attributes: We also changed the way we deal with missing attributes. Initially we gave each missing value a mean value. In our new trial we deleted every entry with N/A value. We then run our model on the remaining data. </p>
+            <p>Deal with Missing Attributes: We also changed the way we deal with missing attributes. Initially we gave each missing value a mean value. In our new trial we deleted every entry with N/A value. We then run our model on the remaining data (2414 for training and 990 for testing data). </p>
           </li>
         </ol>
         <p>As shown in the table below, we are able to get a better result using our updated methods: </p>
@@ -253,7 +261,7 @@
             <td>12.0202%</td>
 		      </tr>
 		      <tr>
-		        <td>Logistic Regression</td>
+		        <td><b>Logistic Regression</b></td>
 		        <td>50.1243%</td>
 		        <td>50.0%</td>
             <td>13.7117%</td>
@@ -267,14 +275,14 @@
             <td>8.5858%</td>
 		      </tr>
           <tr>
-            <td>Classification Via Regression</td>
+            <td><b>Classification Via Regression</b></td>
             <td>50.7871%</td>
             <td>49.4949%</td>
             <td>14.3745%</td>
             <td>10.9090%</td>
           </tr>
           <tr>
-            <td>MultiClass Classifier</td>
+            <td><b>MultiClass Classifier</b></td>
             <td>49.9586%</td>
             <td>49.798%</td>
             <td>13.5460%</td>
@@ -304,8 +312,13 @@
 		    </tbody>
 		</table>
       <h3 class="analysis">Analysis</h3>
-      <p>From the second table, we can see that using our refined method Naïve Bayes, Logistic Regression, Regression and MultiClass Classifier all did a pretty good job. It makes sense that Naïve Base is suitable for this task because given a letter grade we can imagine a student’s other information being independent from each other. We think Logistic Regression and Regression in general are suitable for this task as well because this task was transformed from a numerical problem. Intuitively, it makes sense to think that final grade g is some mathematical function of our feature vectors. Note that, however, K-nearest Neighbor did not perform well in this task. We believe this is because our classification outcome does not have a very strong correlation with our features. Thus, different classes are spread out in the whole space introducing a lot of noises, and finding closest neighbor does not gives a good result. Note that decision tree also doesn’t not perform very well. We think this is because none of our feature provides a very “clean” classification. Namely, which all the feature combined gives us some insight of a student’s performance, none of the single feature is strong enough to give us deterministic information.
+      <p>From the second table, we can see that using our refined method Naïve Bayes, Logistic Regression, Regression and MultiClass Classifier all did a pretty good job. It makes sense that Naïve Base is suitable for this task because given a letter grade we can imagine a student’s other information being independent from each other. We think Logistic Regression and Regression in general are suitable for this task as well because this task was transformed from a numerical problem. Intuitively, it makes sense to think that final grade is some mathematical function of our feature vectors. Notice that Logistic Regression, ClassificationviaRegression and Multiclass Classifier also perform well in the initial approach. These three are relatively robust algorithms. </p>
+      <p>Also, we notice that by normalizing the data, deleting irrelevant attributes and deleting data entries containing "NA", we get improved performance for almost all machine learning algorithms chosen against ZeroR performance. The maximum improvement against ZeroR is around 15%.</p>
+      <p>Note that, however, K-nearest Neighbor did not perform well in this task. We believe this is because our classification outcome does not have a very strong correlation with our features. In other words, even if two students have all the attributes very close to each other (same family background/education resources for example), they might still perform differently in the test since there are many other attributes determining students'
+          performance in the test (for example, whether the student gets enough sleep before test or whether the student works hard may affect the score). Thus, different classes are spread out in the whole space introducing a lot of noises, and finding closest neighbor does not gives a good result. Note that decision tree also doesn’t not perform very well. We think this is because none of our feature provides a very “clean” classification. Namely, which all the feature combined gives us some insight of a student’s performance, none of the single feature is strong enough to give us deterministic information.
       </p>
+      <p>Last but not least, there is still no such an algorithm that gives perfect results. There must be some other factors that affect students' PISA test performance, even though the current features we selected do have correlation with students' test performance.</p>
+
 
       <h3 class="text-left" id="Conclusion">Reflections</h3>
       	<p>In this task, we tried doing classification about a score a student can get given their background information. While we do reach an average 30% improvement than random guesses (ZeroR), we realize that the outcome is not ideal, compared with some other classification tasks we’ve done before. We think there are mainly two reasons. The first is the data we have may not encompass all possibly useful features. There are some other factors that we think may play a role that’s not included, for example family income and difficulty of school curriculum. The second reason is that we believe while score/grade is related to background information, personal endeavors are also crucial for success in schoolwork. This dataset focuses mainly on objective features such as family and school background information instead of more “subjective” features, like how hard a student really works. Thus, to some extent we are happy that we did not get a much higher accuracy. This shows that while a student’s performance in school work is related to some objective factors, it’s not at all deterministic.
