@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- The line below is responsive to the screen size -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Test Score Prediction</title>
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/87382e673b.js"></script>
+      </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top" id="my-navbar">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="index.html" class="navbar-brand">PISA Test Score Classifier</a>
+        </div><!-- Navbar Header-->
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#Synopsis">Synopsis</a></li>
+            <li><a href="data.html">Data</a></li>
+            <li><a href="#Initial">Initial Approach</a></li>
+            <li><a href="#New">New Approach</a></li>
+            <li><a href="#Conclusion">Reflections</a></li>
+            <li><a href="code.html">Code</a></li>
+
+          </ul>
+        </div><!-- End navbar body-->
+      </div><!-- End container-->
+    </nav><!-- End top navbar-->
+
+    <div class="container">
+      <div class="jumbotron">
+        <div class="container text-center">
+          <h2>PISA Test Score Classifier</h2>
+          <h4><a href="http://www.cs.northwestern.edu/~ddowney/courses/349_Spring2017/" target="_blank">Northwestern University EECS 349</a> with Professor Doug Downey </a> </h4>
+         </div>
+        <div class="row text-center">
+          <div class="col-md-4">
+            <h5>Yichun Li</br>yichunli2019@u.northwestern.edu</h5>
+          </div>
+          <div class="col-md-4">
+            <h5>Tieyong Yu</br>tieyongyu2018@u.northwestern.edu</h5>
+          </div>
+          <div class="col-md-4">
+            <h5 id="Synopsis">Zilun Yu</br>zilunyu2019@u.nortwhestern.edu</h5>
+          </div>
+        </div>
+      </div><!-- End jumbotron-->
+    </div><!-- End container -->
+
+<div class="container">
+      <h3 class="text-left">Synopsis</h3>
+        <p>Our task is to predict the PISA test scores for 15-year-old students based on their family and school background.
+          The Programme for International Student Assessment(PISA) is a test offered every 3 years to 15-year-old students
+          from around the world to evaluate their performance in mathematics, reading, and science. Our dataset is targeted towards students living in the
+          United States. Our input attributes include basic personal information, family educational/career background, educational/school resources,
+          and learning experiences for all test candidates. Our output label is a predictive score range for the critical
+          reading section of the test for each candidate.</p>
+        <p>Our task is interesting because we want figure out a quantitative relationship indicating to what extent a student’s
+           family background and school/educational resources can affect his/her academic/IQ performance. Are students' intelligence and hard
+           work more important than resources and environment? Our task is an important one because it provides us with an insight of whether and to what extent
+           some stereotypical attributes/background(like parents' academic degree) can truly reflects/affects students performance so that we can better understand
+           students' academic performance and help them in the future.</p>
+        <p>In total, We tried using the following classifiers for our dataset: Decision Tree (J48), K-nearest Neighbors (IBK),
+          Logistic Regression, Linear Regression, Multilayer Perceptron and Naive Bayes.</p>
+        <p>There are 23 features in total covering basic information, family background, education background and resources, and classroom experience.</p>
+</div><!-- End container-->
+<hr />
+<div class="container" id="Final Report">
+      <h3 class="text-left">Final Report</h3>
+      <h4 class="text-left">Setup</h4>
+      The dataset used is from 2009 United national Cetner for Education Statistics (NCES). There are in total 5233 samples.
+      We used the following 23 features to construct the model for the dataset:
+      <ul>
+      	<li>Grade</li>
+      	<li>Gender</li>
+      	<li>Race</li>
+      	<li>Place of Birth</li>
+      	<li>Education level of father</li>
+      	<li>Education level of mother</li>
+      	<li>Whether father has full-time or part-time work</li>
+      	<li>Whether mother has full-time or part-time work</li>
+      	<li>Father's place of birth</li>
+      	<li>Mother's place of birth</li>
+      	<li>Whether father attended high school</li>
+      	<li>Whether mother attended high school</li>
+      	<li>Whether English is spoken at home as a primary language</li>
+      	<li>Whether the student attended preschool</li>
+      	<li>Whether the student expects to obtain a bachelor’s degree</li>
+      	<li>Whether the student attends a public school</li>
+      	<li>Whether the student’s school owns a library</li>
+      	<li>The number of students in the student’s school</li>
+      	<li>Whether the student has access to a computer for schoolwork</li>
+      	<li>Whether the school is in the urban area</li>
+      	<li>Number of minutes per week the student spends in English class</li>
+      	<li>The number of students in this student’s English class at school</li>
+      	<li>Whether the student reads for pleasure for 30 minutes per day</li>
+      </ul>
+      <p id="Initial">Our output given by the dataset is the exact critical reading scores Y for each candidate. So we initially try doing a regression model first: i.e. we
+        try to find a hyperplane that fits the data to output the predicted score Y<sup>*</sup> and generates the smallest Mean Squared Error (MSE). So we perform a regression
+        task based on the mathematical models given in the book <cite>Machine Learning Refined: Foundations, Algorithms and Applications</cite> and perform matrix/vector calculation to train
+        the weight <b>W</b>. Initial approach is explained below section:</p>
+
+      <h4 class="text-left">Initial Approach</h4>
+      <p>
+        Given 5233 data, we originally used 4733 for training and 500 for testing. We decided to build a linear regression model and use it
+        to predict test scores given test feature vectors and compare the predicted test scores Y<sup>*</sup> with actual test scores Y given in the
+        testing set. The mathematical intuition is simply based on the source book and we perform training for weight <b>W</b> in python (<a href="preprocess.py">Python Code Link</a>)
+      </p>
+      <p>
+      	We wrote our own code to perform the linear regression and also an error function test out the error of the model. And we reached the following results:
+      </p>
+      <img src = "terminal_results.png" alt = "terminal results" width="950" height="150"/>
+      <p id="New">As it shows the mean squared error is about 6900 and the average error rate is about 11%. We calculate the average error rate by:
+      for each test data point, calculate (Y<sup>*</sup><sub>p</sub> - Y<sub>p</sub>) / Y<sub>p</sub> and sum up all of them. Then divide the result body
+      the number of data points (which is 500). 11% means each predicted score is about averagely +/- 83 away from the actual score. The average error rate
+      agrees with the MSE result since 83<sup>2</sup> = 6889, which is approximately equal to the generated MSE.</p>
+      <hr />
+      <h4 class="text-left">New Approach</h4>
+      <p>
+      	We noticed that an error of ±11% could lead to inaccurate results. Therefore, we decided to transform the initial problem into a classification problem: instead of predicting the exact score of a student, we output a possible range of scores that a student is most likely to get. Specifically, we give all scores ≥ 580 class A, all scores in the range [450, 580) class B, and all scores < 450 class C. Then given a student’s information, we hope to correctly identity their score’s range. Since there are only three classes, we hope to achieve a better result.
+      </p>
+      <p>
+        One thing worth mentioning here is that there are a lot of missing values in our data. In our first attempt, we filled these values with the mean value of all data.
+      </p>
+
+      	<h4 class="text-left">Weka Results</h4>
+      	<p>Passing our data into different Weka models, we get the following results. Note that ZeroR is used as a benchmark.</p>
+		<table class="table table-bordered">
+		    <thead>
+		      <tr>
+		        <th>Classifier</th>
+		        <th>Correctly Classified Instances(training)</th>
+		        <th>Correctly Classified Instances(testing)</th>
+            <th>Improvement(against ZeroR/training)</th>
+            <th>Improvement(against ZeroR/testing)</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+          <tr>
+            <td>ZeroR</td>
+		        <td>48.1572%</td>
+		        <td>47.5796%</td>
+            <td>0%</td>
+            <td>0%</td>
+          </tr>
+		      <tr>
+		        <td>Naive Bayes</td>
+		        <td>50.0683%</td>
+		        <td>49.172%</td>
+            <td>1.9111%</td>
+            <td>1.5924%</td>
+		      </tr>
+		      <tr>
+		        <td>Logistic Regression</td>
+		        <td>56.8933%</td>
+		        <td>55.6051%</td>
+            <td>8.7361%</td>
+            <td>8.0255%</td>
+		      </tr>
+		      <tr>
+		        <td>Multilayer Perceptron</td>
+		        <td>54.1906%</td>
+		        <td>49.2994%</td>
+            <td>6.0334%</td>
+            <td>1.7198%</td>
+		      </tr>
+          <tr>
+            <td>Classification Via Regression</td>
+            <td>57.3301%</td>
+            <td>54.9682%</td>
+            <td>9.1729%</td>
+            <td>7.3886%</td>
+          </tr>
+          <tr>
+            <td>MultiClass Classifier</td>
+            <td>57.4939%</td>
+            <td>56.242%</td>
+            <td>9.3367%</td>
+            <td>8.6624%</td>
+          </tr>
+          <tr>
+            <td>Random Forest</td>
+            <td>55.0369%</td>
+            <td>52.0382%</td>
+            <td>6.8797%</td>
+            <td>4.4586%</td>
+          </tr>
+		      <tr>
+		        <td>K-nearest Neighbor(IBk)</td>
+		        <td>45.6456%</td>
+		        <td>46.1783%</td>
+            <td>-2.5116%</td>
+            <td>-1.4013%</td>
+		      </tr>
+		      <tr>
+		        <td>Decision Tree(J48)</td>
+		        <td>50.2867%</td>
+		        <td>47.8981%</td>
+            <td>2.1295%</td>
+            <td>0.3185%</td>
+		      </tr>
+		    </tbody>
+		</table>
+
+      	<h4 class="text-left">Further Efforts</h4>
+        <p>As shown above, our model yields an about 15% improvement compared with ZeroR. Though there is an improvement, we decided to seek further improvement. Here’s what we did:</p>
+        <ol>
+          <li>
+            <p>Data Normalization: For each feature, we normalized all data corresponding to that feature to range [0, 1]. We did this because we thought some features with large values (like school size) would dwarfed other features. </p>
+          </li>
+          <li>
+            <p>Feature Selection: We suspected some of our features may be noisy features. We therefore tried deleting some of our features and re-run the model. For example, we deleted Mother High School, Father High School, and School Size. </p>
+          </li>
+          <li>
+            <p>Deal with Missing Attributes: We also changed the way we deal with missing attributes. Initially we gave each missing value a mean value. In our new trial we deleted every entry with N/A value. We then run our model on the remaining data. </p>
+          </li>
+        </ol>
+        <p>As shown in the table below, we are able to get a better result using our updated methods: </p>
+
+		<table class="table table-bordered">
+		    <thead>
+		      <tr>
+		        <th>Classifier</th>
+		        <th>Correctly Classified Instances(training)</th>
+		        <th>Correctly Classified Instances(testing)</th>
+            <th>Improvement(against ZeroR/training)</th>
+            <th>Improvement(against ZeroR/testing)</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+          <tr>
+		        <td>ZeroR</td>
+		        <td>36.4126%</td>
+		        <td>38.5859%</td>
+            <td>0%</td>
+            <td>0%</td>
+		      </tr>
+		      <tr>
+		        <td>Naive Bayes</td>
+		        <td>48.3016%</td>
+		        <td>50.6061%</td>
+            <td>11.8890%</td>
+            <td>12.0202%</td>
+		      </tr>
+		      <tr>
+		        <td>Logistic Regression</td>
+		        <td>50.1243%</td>
+		        <td>50.0%</td>
+            <td>13.7117%</td>
+            <td>11.4141%</td>
+		      </tr>
+		      <tr>
+		        <td>Multilayer Perceptron</td>
+		        <td>48.0944%</td>
+		        <td>47.1717%</td>
+            <td>11.6818%</td>
+            <td>8.5858%</td>
+		      </tr>
+          <tr>
+            <td>Classification Via Regression</td>
+            <td>50.7871%</td>
+            <td>49.4949%</td>
+            <td>14.3745%</td>
+            <td>10.9090%</td>
+          </tr>
+          <tr>
+            <td>MultiClass Classifier</td>
+            <td>49.9586%</td>
+            <td>49.798%</td>
+            <td>13.5460%</td>
+            <td>11.2121%</td>
+          </tr>
+          <tr>
+            <td>Random Forest</td>
+            <td>41.3007%</td>
+            <td>46.5657%</td>
+            <td>4.8881%</td>
+            <td>7.9798%</td>
+          </tr>
+		      <tr>
+		        <td>K-nearest Neighbor(IBk)</td>
+		        <td>40.8451%</td>
+		        <td>39.798%</td>
+            <td>4.4325%</td>
+            <td>1.2121%</td>
+		      </tr>
+		      <tr>
+		        <td>Decision Tree(J48)</td>
+		        <td>45.4018%</td>
+		        <td>46.0606%</td>
+            <td>8.9892%</td>
+            <td>7.4747%</td>
+		      </tr>
+		    </tbody>
+		</table>
+      <h3 class="analysis">Analysis</h3>
+      <p>From the second table, we can see that using our refined method Naïve Bayes, Logistic Regression, Regression and MultiClass Classifier all did a pretty good job. It makes sense that Naïve Base is suitable for this task because given a letter grade we can imagine a student’s other information being independent from each other. We think Logistic Regression and Regression in general are suitable for this task as well because this task was transformed from a numerical problem. Intuitively, it makes sense to think that final grade g is some mathematical function of our feature vectors. Note that, however, K-nearest Neighbor did not perform well in this task. We believe this is because our classification outcome does not have a very strong correlation with our features. Thus, different classes are spread out in the whole space introducing a lot of noises, and finding closest neighbor does not gives a good result. Note that decision tree also doesn’t not perform very well. We think this is because none of our feature provides a very “clean” classification. Namely, which all the feature combined gives us some insight of a student’s performance, none of the single feature is strong enough to give us deterministic information.
+      </p>
+
+      <h3 class="text-left" id="Conclusion">Reflections</h3>
+      	<p>In this task, we tried doing classification about a score a student can get given their background information. While we do reach an average 30% improvement than random guesses (ZeroR), we realize that the outcome is not ideal, compared with some other classification tasks we’ve done before. We think there are mainly two reasons. The first is the data we have may not encompass all possibly useful features. There are some other factors that we think may play a role that’s not included, for example family income and difficulty of school curriculum. The second reason is that we believe while score/grade is related to background information, personal endeavors are also crucial for success in schoolwork. This dataset focuses mainly on objective features such as family and school background information instead of more “subjective” features, like how hard a student really works. Thus, to some extent we are happy that we did not get a much higher accuracy. This shows that while a student’s performance in school work is related to some objective factors, it’s not at all deterministic.
+        </p>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  </body>
+</html>
